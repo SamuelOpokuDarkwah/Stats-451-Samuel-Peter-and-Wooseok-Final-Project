@@ -40,25 +40,25 @@ Filters are; Study Hours, Sleep Hours, Stress Level, Color in Trade Off plot.
 Samuel's Dashboard
 
 Provides analysis of customer shopping behavior.
-The dashboard questions such as, how does age, gender, and location affect the average purchase amount? What categories and seasons generate the highest sales? and which payment methods and shipping types are most commonly used?, How do     discounts, promo codes, and subscription status impact spending?, Are there correlations between purchase frequency, spending, and review rates?
+The dashboard questions such as: how does age, gender, and location affect the average purchase amount? What categories and seasons generate the highest sales? and which payment methods and shipping types are most commonly used?, How do discounts, promo codes, and subscription status impact spending?, Are there correlations between purchase frequency, spending, and review rates?
   
 Tabs available in samuels dashboard include;
-  Data overview :View the complete dataset in a searchable table.See statistical summaries and missing value counts
-  Categorical variables : Select any categorical variable from dropdown to view count distributions as interactive bar charts
-  Numerical Variables :Choose numerical variables to explore their distribution histograms with density curves
-  Demographics :Gender distribution pie chart.Purchase amounts, age, and previous purchases by gender.Box plots for comparative analysis
-  Geography :Top locations by customer count.Average spending by location.Interactive US map showing spending by state
-  Seasonal & Category :Sales distribution across seasons.Category popularity and average spending.Review ratings by product category.Seasonal category performance
-  Behavior Patterns :Purchase frequency distributions.Payment method preferences.Shipping type usage.Subscription status breakdown
-  Correlations: Heatmap showing relationships between numerical variables.Identifies positive/negative correlations in the data
-  Discounts & Promotions :Promo code usage patterns.Discount application analysis.Impact of discounts on purchase amounts
-  Age Group Analysis :Spending patterns across age groups.Previous purchase history by age.Rating behavior differences.Purchase frequency by demographic
+  - Data overview :View the complete dataset in a searchable table.See statistical summaries and missing value counts
+  - Categorical variables : Select any categorical variable from dropdown to view count distributions as interactive bar charts
+  - Numerical Variables :Choose numerical variables to explore their distribution histograms with density curves
+  - Demographics :Gender distribution pie chart.Purchase amounts, age, and previous purchases by gender.Box plots for comparative analysis
+  - Geography :Top locations by customer count.Average spending by location.Interactive US map showing spending by state
+  - Seasonal & Category :Sales distribution across seasons.Category popularity and average spending.Review ratings by product category.Seasonal category performance
+  - Behavior Patterns :Purchase frequency distributions.Payment method preferences.Shipping type usage.Subscription status breakdown
+  - Correlations: Heatmap showing relationships between numerical variables.Identifies positive/negative correlations in the data
+  - Discounts & Promotions :Promo code usage patterns.Discount application analysis.Impact of discounts on purchase amounts
+  - Age Group Analysis :Spending patterns across age groups.Previous purchase history by age.Rating behavior differences.Purchase frequency by demographic
 
 Interactive Features
- Hover: Hover over charts to see detailed values
- Zoom: Click and drag to zoom into specific chart areas
- Filter: Use dropdowns to select different variables
- Export: Download or export visualizations using plotly tools
+ - Hover: Hover over charts to see detailed values
+ - Zoom: Click and drag to zoom into specific chart areas
+ - Filter: Use dropdowns to select different variables
+ - Export: Download or export visualizations using plotly tools
 
 
 

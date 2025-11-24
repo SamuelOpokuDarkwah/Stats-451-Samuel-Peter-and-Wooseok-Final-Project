@@ -25,6 +25,21 @@ df1 <- df1 %>%
   )
 
 #Peter's Dataset
+# Peter's Data prep
+df2 <- read_csv("NCHS_-_Leading_Causes_of_Death__United_States.csv")
+# Models
+top5 <- df2 %>%
+  filter(State == "United States", `Cause Name` != "All causes") %>%
+  group_by(`Cause Name`) %>%
+  summarise(total_deaths = sum(Deaths, na.rm = TRUE)) %>%
+  arrange(desc(total_deaths)) %>%
+  slice_max(total_deaths, n = 5) %>%
+  pull(`Cause Name`)
+
+trend_data <- df2 %>%
+  filter(State == "United States",
+         `Cause Name` %in% top5) %>%
+  mutate(`Cause Name` = factor(`Cause Name`, levels = top5))
 
 
 #Wooseok's Dataset
@@ -152,6 +167,77 @@ ui <- navbarPage(
   ),
   
   # ------------------- Peter's ui -------------------
+  tabPanel("Peter's Analysis",
+           tabsetPanel(
+             
+             # ---- Dataset Overview ----
+             tabPanel("Dataset Overview",
+                      h3("Dataset Preview"),
+                      DTOutput("table")
+             ),
+             
+             # ---- Yearly Summary ----
+             tabPanel("Yearly Summary",
+                      h3("Leading Causes of Death in the U.S. by Year"),
+                      
+                      sliderInput("year_slider",
+                                  "Select Year:",
+                                  min = min(df2$Year, na.rm = TRUE),
+                                  max = max(df2$Year, na.rm = TRUE),
+                                  value = max(df2$Year, na.rm = TRUE),
+                                  step = 1,
+                                  sep = ""),
+                      
+                      plotlyOutput("barplot")
+             ),
+             
+             # ---- Trends Over Time ----
+             tabPanel("Death Trends (Top 5 Causes)",
+                      h3("Trends in Leading Causes of Death Over Time"),
+                      plotlyOutput("trendplot")
+             ),
+             
+             
+             # ---- Multi-Cause Trend Comparison ----
+             tabPanel("Compare Multiple Causes",
+                      h3("Compare Causes Over Time"),
+                      checkboxGroupInput("cause_multi", 
+                                         "Select Causes:",
+                                         choices = sort(unique(df2$`Cause Name`)),
+                                         selected = top5),
+                      plotlyOutput("trend_compare_plot")
+             ),
+             
+             # ---- State Comparison ----
+             tabPanel("State Comparison",
+                      h3("Compare Deaths Across States"),
+                      selectInput("cause_state", "Select Cause:", choices = top5),
+                      plotlyOutput("state_compare_plot")
+             ),
+             
+             # ---- Rate Trends by Year ----
+             tabPanel(
+               "Rate Trends by Year",
+               
+               sidebarLayout(
+                 sidebarPanel(
+                   selectInput("rate_state", "Select State:",
+                               choices = NULL),
+                   
+                   selectInput("rate_cause", "Select Cause:",
+                               choices = NULL),
+                   
+                   width = 3
+                 ),
+                 
+                 mainPanel(
+                   plotOutput("rate_trend_plot", height = "450px")
+                 )
+               )
+             )
+             
+           )
+  )
 
   
   # ------------------- Wooseok's ui -------------------
@@ -433,6 +519,129 @@ server <- function(input, output, session) {
     ggplotly(p)
   }) 
   # ------------------- Peter's SERVER -------------------
+    # ---- Dataset Table ----
+  output$table <- renderDT({
+    datatable(df2)
+  })
+  
+  # ---- Bar plot for selected year ----
+  output$barplot <- renderPlotly({
+    
+    selected_data <- df2 %>%
+      filter(State == "United States",
+             Year == input$year_slider,
+             `Cause Name` != "All causes")
+    
+    p <- ggplot(selected_data,
+                aes(x = reorder(`Cause Name`, Deaths),
+                    y = Deaths,
+                    fill = `Cause Name`)) +
+      geom_col(show.legend = FALSE) +
+      coord_flip() +
+      labs(
+        title = paste("Leading Causes of Death -", input$year_slider),
+        x = "Cause of Death",
+        y = "Deaths"
+      ) +
+      scale_y_continuous(labels = scales::comma)
+    
+    ggplotly(p)
+  })
+  
+  # ---- Trend Plot (Top 5 Causes) ----
+  output$trendplot <- renderPlotly({
+    
+    p <- ggplot(trend_data,
+                aes(x = Year,
+                    y = Deaths,
+                    color = `Cause Name`)) +
+      geom_line(size = 1.2) +
+      labs(
+        x = "Year",
+        y = "Deaths",
+        color = "Cause"
+      ) +
+      scale_y_continuous(labels = scales::comma,
+                         limits = c(0, NA),
+                         breaks = function(x) unique(c(0, pretty(x))))
+    
+    ggplotly(p)
+  })
+  
+  # ---- State Comparison Plot ----
+  output$state_compare_plot <- renderPlotly({
+    p <- df2 %>%
+      filter(`Cause Name` == input$cause_state,
+             State != "United States") %>%
+      group_by(State) %>%
+      summarise(total = sum(Deaths), .groups = "drop") %>%
+      arrange(desc(total)) %>%
+      slice(1:10) %>%
+      ggplot(aes(x = total, y = reorder(State, total))) +
+      geom_col(fill = "steelblue") +
+      labs(
+        title = paste("Top 10 States by Deaths for:", input$cause_state),
+        x = "Total Deaths",
+        y = ""
+      )
+    
+    ggplotly(p)
+  })
+  
+  # ---- Multi-Cause Trend Comparison ----
+  output$trend_compare_plot <- renderPlotly({
+    data <- df2 %>%
+      filter(State == "United States",
+             `Cause Name` %in% input$cause_multi)
+    
+    p <- ggplot(data, aes(x = Year, y = Deaths, color = `Cause Name`)) +
+      geom_line(size = 1.1) +
+      labs(title = "Trend Comparison of Selected Causes",
+           x = "Year",
+           y = "Deaths") +
+      scale_y_continuous(labels = scales::comma)
+    
+    ggplotly(p)
+  })
+  
+  # ---- Populate dropdowns for Rate Trends ----
+  observe({
+    updateSelectInput(
+      session,
+      "rate_state",
+      choices = sort(unique(df2$State)),
+      selected = "United States"
+    )
+    
+    updateSelectInput(
+      session,
+      "rate_cause",
+      choices = sort(unique(df2$`Cause Name`)),
+      selected = sort(unique(df2$`Cause Name`))[1]
+    )
+  })
+  
+  # ---- Rate Trends Plot ----
+  output$rate_trend_plot <- renderPlot({
+    req(input$rate_state, input$rate_cause)
+    
+    data_rate <- df2 %>%
+      filter(
+        State == input$rate_state,
+        `Cause Name` == input$rate_cause
+      )
+    
+    ggplot(data_rate, aes(x = Year, y = `Age-adjusted Death Rate`)) +
+      geom_line(linewidth = 1.2, color = "steelblue") +
+      geom_point(size = 2) +
+      labs(
+        title = "Age-Adjusted Death Rate Over Time",
+        subtitle = paste(input$rate_cause, "in", input$rate_state),
+        x = "Year",
+        y = "Rate (per 100,000)"
+      ) +
+      theme_minimal(base_size = 14)
+  })
   
   # ------------------- Wooseok's SERVER -------------------
   m1_filtered <- reactive({

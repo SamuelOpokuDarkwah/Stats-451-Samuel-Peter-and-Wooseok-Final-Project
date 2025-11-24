@@ -399,7 +399,7 @@ server <- function(input, output, session) {
   output$topLocations1 <- renderPlotly({
     top_loc <- df1 %>% count(Location, sort = TRUE) %>% slice(1:10)
     p <- ggplot(top_loc, aes(x = n, y = reorder(Location, n), fill = Location)) +
-      geom_col() + scale_fill_viridis_d(option = "viridis") + labs(title = "Top 10 Locations")
+      geom_col() + scale_fill_viridis_d(option = "viridis") + labs(title = "Top 10 Locations", y= "Location")
     ggplotly(p)
   })
   
@@ -430,14 +430,15 @@ server <- function(input, output, session) {
   output$categoryCount1 <- renderPlotly({
     cat_count <- df1 %>% count(Category)
     p <- ggplot(cat_count, aes(x = n, y = reorder(Category, n), fill = Category)) +
-      geom_col() + scale_fill_viridis_d(option = "viridis") + labs(title = "Purchases by Category")
+      geom_col() + scale_fill_viridis_d(option = "viridis") + labs(title = "Purchases by Category")+
+    labs(y= "Category")
     ggplotly(p)
   })
   
   output$categoryAvg1 <- renderPlotly({
     cat_avg <- df1 %>% group_by(Category) %>% summarize(avg_purchase = mean(`Purchase Amount (USD)`))
     p <- ggplot(cat_avg, aes(x = avg_purchase, y = reorder(Category, avg_purchase), fill = Category)) +
-      geom_col() + scale_fill_viridis_d(option = "viridis") + labs(title = "Average Purchase by Category")
+      geom_col() + scale_fill_viridis_d(option = "viridis") + labs(title = "Average Purchase by Category", y="Category")
     ggplotly(p)
   })
   

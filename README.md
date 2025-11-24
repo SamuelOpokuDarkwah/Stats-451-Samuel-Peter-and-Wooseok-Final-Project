@@ -2,6 +2,17 @@
 Final Project
 
 
+Peter's Dashboard
+This dashboard explores the trends, distributions, and comparisons of the leading causes of death in the United States using NCHS data. The main goal is to provide interactive visualizations to analyze mortality patterns across time, states, and causes.
+
+Tabs and their functionalities:
+- Data Overview: Displays the full dataset in a table. Users can filter and explore the raw data.
+- Yearly Summary: Shows a bar chart of the top causes of death for a selected year. Users can select a specific year with a slider.
+- Death Trends (Top 5 Causes): Shows line plots for the top 5 causes of death nationwide over time.
+- Comparing Multiple Causes: Using a similar line plot to the previous tab, we can add and remove causes to accurately compare trends over time for specific causes.
+- State Comparison: Takes the top ten states for each cause of deaths. User can pick a specific cause they want to look at and the graph will display the top ten states and its total.
+- Rate Trends by Year: This graph allows the user to select the state and a cause of death, and the ui will give a graph with the age-adjusted death rates over time.
+
 
 
 

@@ -38,6 +38,7 @@ Filters are; Study Hours, Sleep Hours, Stress Level, Color in Trade Off plot.
 - GPA distribution : This tab shows different types of plots to see the stress level and GPA relationship.
 
 Samuel's Dashboard
+
 Provides analysis of customer shopping behavior.
 The dashboard questions such as, how does age, gender, and location affect the average purchase amount? What categories and seasons generate the highest sales? and which payment methods and shipping types are most commonly used?, How do     discounts, promo codes, and subscription status impact spending?, Are there correlations between purchase frequency, spending, and review rates?
   

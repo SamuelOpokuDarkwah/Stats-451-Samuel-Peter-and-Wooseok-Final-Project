@@ -430,8 +430,7 @@ server <- function(input, output, session) {
   output$categoryCount1 <- renderPlotly({
     cat_count <- df1 %>% count(Category)
     p <- ggplot(cat_count, aes(x = n, y = reorder(Category, n), fill = Category)) +
-      geom_col() + scale_fill_viridis_d(option = "viridis") + labs(title = "Purchases by Category")+
-    labs(y= "Category")
+      geom_col() + scale_fill_viridis_d(option = "viridis") + labs(title = "Purchases by Category",y="Category")
     ggplotly(p)
   })
   

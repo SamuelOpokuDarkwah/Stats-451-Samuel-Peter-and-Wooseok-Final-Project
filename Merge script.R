@@ -74,9 +74,9 @@ rownames(pca_m1$rotation) <- rn
 
 df_pca <- as.data.frame(pca_m1$x[, 1:2])
 colnames(df_pca) <- c("PC1", "PC2")
-df_pca$Stress_Level        <- df1$Stress_Level
-df_pca$Study_Hours_Per_Day <- df1$Study_Hours_Per_Day
-df_pca$Sleep_Hours_Per_Day <- df1$Sleep_Hours_Per_Day
+df_pca$Stress_Level        <- df3$Stress_Level
+df_pca$Study_Hours_Per_Day <- df3$Study_Hours_Per_Day
+df_pca$Sleep_Hours_Per_Day <- df3$Sleep_Hours_Per_Day
 #Wooseok Data done
 
 # ---- UI ----
@@ -237,7 +237,7 @@ ui <- navbarPage(
              )
              
            )
-  )
+  ),
 
   
   # ------------------- Wooseok's ui -------------------
@@ -301,7 +301,7 @@ ui <- navbarPage(
             "Stress Profile",
             selectInput(
               "m1_student", "Choose Student ID",
-              choices = df1$Student_ID
+              choices = df3$Student_ID
             ),
             plotOutput("m1_radar", height = "450px")
           ),
@@ -645,7 +645,7 @@ server <- function(input, output, session) {
   
   # ------------------- Wooseok's SERVER -------------------
   m1_filtered <- reactive({
-    d <- df1 %>%
+    d <- df3 %>%
       dplyr::filter(
         dplyr::between(Study_Hours_Per_Day, input$m1_study_range[1], input$m1_study_range[2]),
         dplyr::between(Sleep_Hours_Per_Day,  input$m1_sleep_range[1], input$m1_sleep_range[2])
@@ -752,7 +752,7 @@ server <- function(input, output, session) {
   })
   
   output$m1_heatmap <- renderPlot({
-    df1 %>%
+    df3 %>%
       mutate(sleep_bin = cut(Sleep_Hours_Per_Day, breaks=seq(4,10,1)),
              study_bin = cut(Study_Hours_Per_Day, breaks=seq(0,12,1))) %>%
       group_by(study_bin, sleep_bin) %>%
@@ -768,8 +768,8 @@ server <- function(input, output, session) {
   })
   
   output$m1_radar <- renderPlot({
-    student <- df1 %>% filter(Student_ID == input$m1_student)
-    avg <- df1 %>% summarise(across(ends_with("_Hours_Per_Day"), mean))
+    student <- df3 %>% filter(Student_ID == input$m1_student)
+    avg <- df3 %>% summarise(across(ends_with("_Hours_Per_Day"), mean))
     
     df_radar <- rbind(
       max = c(12,10,8,8,8),
@@ -787,16 +787,16 @@ server <- function(input, output, session) {
                        Study_Hours_Per_Day + Sleep_Hours_Per_Day + 
                        Extracurricular_Hours_Per_Day + Social_Hours_Per_Day +
                        Physical_Activity_Hours_Per_Day, 
-                     data = df1)
+                     data = df3)
   
   output$m1_prediction <- renderPrint({
     
     newdata <- data.frame(
       Study_Hours_Per_Day        = input$pred_study,
       Sleep_Hours_Per_Day        = input$pred_sleep,
-      Extracurricular_Hours_Per_Day = mean(df1$Extracurricular_Hours_Per_Day),
-      Social_Hours_Per_Day          = mean(df1$Social_Hours_Per_Day),
-      Physical_Activity_Hours_Per_Day = mean(df1$Physical_Activity_Hours_Per_Day)
+      Extracurricular_Hours_Per_Day = mean(df3$Extracurricular_Hours_Per_Day),
+      Social_Hours_Per_Day          = mean(df3$Social_Hours_Per_Day),
+      Physical_Activity_Hours_Per_Day = mean(df3$Physical_Activity_Hours_Per_Day)
     )
     
     if (input$model_type == "Linear Regression") {

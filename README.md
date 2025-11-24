@@ -1,11 +1,12 @@
 # Stats-451-Samuel-Peter-and-Wooseok-Final-Project
-Final Project- How to use the Dashboard
+## Final Project- How to use the Dashboard
 
-Navigation
+### Navigation
+
 Use the top navigation bar to switch between different team members' analyses
 
 
-Peter's Dashboard
+### Peter's Dashboard
 This dashboard explores the trends, distributions, and comparisons of the leading causes of death in the United States using NCHS data. The main goal is to provide interactive visualizations to analyze mortality patterns across time, states, and causes.
 
 Tabs and their functionalities:
@@ -19,7 +20,7 @@ Tabs and their functionalities:
 
 
 
-__Wooseok's Dashboard
+### Wooseok's Dashboard
 
 The data is about student's lifestyle, GPA, Stress level.
 
@@ -37,7 +38,7 @@ Filters are; Study Hours, Sleep Hours, Stress Level, Color in Trade Off plot.
 - Stress Predictor : This shows depending on which model type, you input the values of study hours and sleep hours, predicts the stress level.
 - GPA distribution : This tab shows different types of plots to see the stress level and GPA relationship.
 
-Samuel's Dashboard
+### Samuel's Dashboard
 
 Provides analysis of customer shopping behavior.
 The dashboard questions such as: how does age, gender, and location affect the average purchase amount? What categories and seasons generate the highest sales? and which payment methods and shipping types are most commonly used?, How do discounts, promo codes, and subscription status impact spending?, Are there correlations between purchase frequency, spending, and review rates?
